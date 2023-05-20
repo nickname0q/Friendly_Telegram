@@ -61,41 +61,39 @@ class LinksMod(loader.Module):
                 admined_group_links.append(f'<a href="https://t.me/{obj.username}">{obj.title}</a>')
         return admined_group_links
 
-@loader.owner
-async def allchatlinkscmd(self, message):
-    """Retrieve links to all chats, channels, private messages (id), bots and open groups/chats where the user is an admin."""
-    info_msg = await utils.answer(message, "Getting information...")
-    user_id = message.from_id
-    chat_links = await self.find_chats(user_id)
-    channel_links = await self.find_channels(user_id)
-    private_message_links = await self.find_private_messages(user_id)
-    bot_links = await self.find_bots(user_id)
-    admined_group_links = await self.find_admined_groups()
+    @loader.owner
+    async def allchatlinkscmd(self, message):
+        """Retrieve links to all chats, channels, private messages (id), bots and open groups/chats where the user is an admin."""
+        info_msg = await utils.answer(message, "Getting information...")
+        user_id = message.from_id
+        chat_links = await self.find_chats(user_id)
+        channel_links = await self.find_channels(user_id)
+        private_message_links = await self.find_private_messages(user_id)
+        bot_links = await self.find_bots(user_id)
+        admined_group_links = await self.find_admined_groups()
 
-    result = []
-    if chat_links:
-        result.append("<b>All chats:</b>\n" + "\n".join(chat_links))
-    if channel_links:
-        result.append("<b>Channels:</b>\n" + "\n".join(channel_links))
-    if private_message_links:
-        result.append("<b>Private Messages:</b>\n" + "\n".join(private_message_links))
-    if bot_links:
-        result.append("<b>Bots:</b>\n" + "\n".join(bot_links))
-    if admined_group_links:
-        result.append("<b>Admined Open Groups/Chats:</b>\n" + "\n".join(admined_group_links))
+        result = []
+        if chat_links:
+            result.append("<b>All chats:</b>\n" + "\n".join(chat_links))
+        if channel_links:
+            result.append("<b>Channels:</b>\n" + "\n".join(channel_links))
+        if private_message_links:
+            result.append("<b>Private Messages:</b>\n" + "\n".join(private_message_links))
+        if bot_links:
+            result.append("<b>Bots:</b>\n" + "\n".join(bot_links))
+        if admined_group_links:
+            result.append("<b>Admined Open Groups/Chats:</b>\n" + "\n".join(admined_group_links))
 
-    result_text = "\n\n".join(result)
-    with open("result.html", "w") as file:
-        file.write(result_text)
+        result_text = "\n\n".join(result)
+        with open("result.html", "w") as file:
+            file.write(result_text)
 
-    await message.client.send_file(
-        message.chat_id,
-        "result.html",
-        caption="Links to chats, channels, private messages, bots, and admined groups/chats.",
-        parse_mode="HTML"
-    )
+        await message.client.send_file(
+            message.chat_id,
+            "result.html",
+            caption="Links to chats, channels, private messages, bots, and admined groups/chats.",
+            parse_mode="HTML"
+        )
 
-    import os
-    os.remove("result.html")
-
-    await message.client.delete_messages(message.chat_id, info_msg)
+        import os
+        os.remove("result.html")
