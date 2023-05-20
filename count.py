@@ -25,7 +25,7 @@ class CountDialogsMod(loader.Module):
         num_bots = 0
         num_blocked_chats = 0
 
-        await utils.answer(message, "Getting information...")
+        info_message = await utils.answer(message, "Getting information...")
 
         async for dialog in self.client.iter_dialogs():
             if isinstance(dialog.entity, types.User):
@@ -48,8 +48,9 @@ class CountDialogsMod(loader.Module):
         end_time = datetime.datetime.now()
         duration_in_seconds = (end_time - start_time).seconds
 
-        await utils.answer(
-            message,
+        await self.client.edit_message(
+            message.chat_id,
+            info_message[0].id,
             f"My Telegram Account Infos:\n"
             f"Users:\t{num_users}\n"
             f"Basic Groups:\t{num_basic_groups}\n"
