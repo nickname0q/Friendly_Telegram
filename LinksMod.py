@@ -4,7 +4,7 @@ from .. import loader, utils
 
 @loader.tds
 class LinksMod(loader.Module):
-    """Retrieve links to all chats, channels, private messages (id), bots and open groups/chats where the user is an admin."""
+    """Retrieve links to all chats, channels, private messages (id), bots and open groups/chats where the user is an owner."""
 
     strings = {"name": "Links (all chat in .html)"}
 
@@ -63,8 +63,7 @@ class LinksMod(loader.Module):
 
     @loader.owner
     async def allchatlinkscmd(self, message):
-        """Retrieve links to all chats, channels, private messages (id), bots and open groups/chats where the user is an admin."""
-        info_msg = await utils.answer(message, "Getting information...")
+        """Retrieve links to all chats, channels, private messages (id), bots and open groups/chats where the user is an owner."""
         user_id = message.from_id
         chat_links = await self.find_chats(user_id)
         channel_links = await self.find_channels(user_id)
@@ -82,7 +81,7 @@ class LinksMod(loader.Module):
         if bot_links:
             result.append("<b>Bots:</b>\n" + "\n".join(bot_links))
         if admined_group_links:
-            result.append("<b>Admined Open Groups/Chats:</b>\n" + "\n".join(admined_group_links))
+            result.append("<b>Owner Open Groups/Chats:</b>\n" + "\n".join(admined_group_links))
 
         result_text = "\n\n".join(result)
         with open("result.html", "w") as file:
